@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Post } from './post.model';
 import { Subject } from 'rxjs';
 
@@ -7,19 +8,26 @@ import { Subject } from 'rxjs';
 })
 export class PostsService {
     private posts: Post[] = [];
-    private postUpdated = new Subject<Post[]>();
+    private postsUpdated = new Subject<Post[]>();
+
+    constructor(private http: HttpClient) { }
 
     getPosts() {
-        return [...this.posts];
+        // httpClient doesn't need to be unsubscribed
+        this.http.get<{ message: string, posts: Post[] }>('http://localhost:3000/api/posts')
+            .subscribe((postData) => {
+                this.posts = postData.posts;
+                this.postsUpdated.next([...this.posts]);
+            });
     }
 
     getPostUpdateListener() {
-        return this.postUpdated.asObservable(); // returns it as listener, but cannot emit
+        return this.postsUpdated.asObservable(); // returns it as listener, but cannot emit
     }
 
     addPost(title: string, content: string) {
-        const post: Post = { title, content };
+        const post: Post = { id: null, title, content };
         this.posts.push(post);
-        this.postUpdated.next([...this.posts]);
+        this.postsUpdated.next([...this.posts]);
     }
 }
