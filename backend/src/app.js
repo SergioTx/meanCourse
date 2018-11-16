@@ -1,8 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const Post = require('./models/post');
 
+var user = 'admin';
+var pass = 'dontcopythisone';
+const connectionUrl = `mongodb+srv://${user}:${pass}@cluster0-ejmso.mongodb.net/test?retryWrites=true`;
+
+console.log(connectionUrl);
+mongoose.connect(connectionUrl, { useNewUrlParser: true })
+    .then(() => {
+        console.log('Connected to database!')
+    })
+    .catch(() => {
+        console.log('Connection failed!');
+    });
 
 const app = express();
 
