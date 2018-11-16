@@ -4,9 +4,10 @@ const mongoose = require('mongoose');
 
 const Post = require('./models/post');
 
-var user = 'admin';
-var pass = 'dontcopythisone';
-const connectionUrl = `mongodb+srv://${user}:${pass}@cluster0-ejmso.mongodb.net/test?retryWrites=true`;
+const user = 'admin';
+const pass = 'nottherealpass';
+const dbname = 'node-angular';
+const connectionUrl = `mongodb+srv://${user}:${pass}@cluster0-ejmso.mongodb.net/${dbname}?retryWrites=true`;
 
 console.log(connectionUrl);
 mongoose.connect(connectionUrl, { useNewUrlParser: true })
@@ -41,7 +42,7 @@ app.post('/api/posts', (req, res, next) => {
         title: req.body.title,
         content: req.body.content
     });
-    console.log(post);
+    post.save();
     res.status(201).json({
         message: 'Post added successfully'
     });
