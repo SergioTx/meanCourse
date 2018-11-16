@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const Post = require('./models/post');
 
 const user = 'admin';
-const pass = 'nottherealpass';
+const pass = '';
 const dbname = 'node-angular';
 const connectionUrl = `mongodb+srv://${user}:${pass}@cluster0-ejmso.mongodb.net/${dbname}?retryWrites=true`;
 
@@ -49,19 +49,13 @@ app.post('/api/posts', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-    const posts = [{
-        id: '1fghdfhdfghdfgh',
-        title: 'First server-side post',
-        content: 'This is coming from the server'
-    }, {
-        id: '2alsdjfasñdlf',
-        title: 'Second server-side post',
-        content: 'This is coming from the server!'
-    }];
-    res.status(200)
-        .json({
-            message: 'Posts fetched successfully!',
-            posts: posts
+    Post.find()
+        .then(documents => {
+            res.status(200)
+                .json({
+                    message: 'Posts fetched successfully!',
+                    posts: documents
+                });
         });
 });
 
