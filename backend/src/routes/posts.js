@@ -9,7 +9,7 @@ const MIME_TYPE_MAP = {
     'image/pmg': 'png',
     'image/jpeg': 'jpeg',
     'image/jpg': 'jpg'
-}
+};
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
         if (isValid) {
             error = null;
         }
-        cb(error, 'backend/images'); //path relative to server.js
+        cb(error, 'images'); //path relative to server.js
     },
     filename: (req, file, cb) => {
         const name = file.originalname.toLowerCase().split(' ').join('-');
@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
     }
 });
 
-router.post('', multer(storage).single('image'), (req, res, next) => {
+router.post('', multer({ storage: storage }).single('image'), (req, res, next) => {
     const post = new Post({
         title: req.body.title,
         content: req.body.content
