@@ -9,7 +9,6 @@ const pass = '';
 const dbname = 'node-angular';
 const connectionUrl = `mongodb+srv://${user}:${pass}@cluster0-ejmso.mongodb.net/${dbname}?retryWrites=true`;
 
-console.log(connectionUrl);
 mongoose.connect(connectionUrl, { useNewUrlParser: true })
     .then(() => {
         console.log('Connected to database!')
@@ -73,6 +72,17 @@ app.get('/api/posts', (req, res, next) => {
                     message: 'Posts fetched successfully!',
                     posts: documents
                 });
+        });
+});
+
+app.get('/api/posts/:id', (req, res, next) => {
+    Post.findById(req.params.id)
+        .then(post => {
+            if (post) {
+                res.status(200).json(post);
+            } else {
+                res.status(404).json({ message: 'Post not found' });
+            }
         });
 });
 
